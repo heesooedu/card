@@ -17,6 +17,17 @@
     };
   };
 
+  const blockZoomGestures = () => {
+    document.addEventListener("gesturestart", (event) => event.preventDefault());
+    document.addEventListener(
+      "touchmove",
+      (event) => {
+        if (event.touches.length > 1) event.preventDefault();
+      },
+      { passive: false }
+    );
+  };
+
   setText("groomName", data.groom.name);
   setText("brideName", data.bride.name);
   setText("groomNameDetail", data.groom.name);
@@ -72,10 +83,13 @@
           position
         });
 
-        const infoWindow = new window.kakao.maps.InfoWindow({
-          content: `<div class="map-label">${data.wedding.venue}</div>`
+        window.kakao.maps.event.addListener(map, "click", () => {
+          window.open(data.wedding.mapUrl, "_blank", "noreferrer");
         });
-        infoWindow.open(map, marker);
+
+        window.kakao.maps.event.addListener(marker, "click", () => {
+          window.open(data.wedding.mapUrl, "_blank", "noreferrer");
+        });
       });
     };
     script.onerror = () => {
@@ -85,6 +99,7 @@
     document.head.appendChild(script);
   };
 
+  blockZoomGestures();
   renderDirections();
   renderKakaoMap();
 
