@@ -1,28 +1,51 @@
 window.INVITATION = {
   groom: {
-    name: "김신랑",
-    parents: "김아버지 · 박어머니의 아들",
+    name: "서희수",
+    parents: "서준 · 박인덕 아들",
     account: "신랑측 계좌 정보를 입력해 주세요"
   },
   bride: {
-    name: "이신부",
+    name: "송윤하",
     parents: "이아버지 · 최어머니의 딸",
     account: "신부측 계좌 정보를 입력해 주세요"
   },
   wedding: {
-    dateShort: "2026. 00. 00. 토요일 오후 0시",
-    dateLong: "2026년 00월 00일 토요일 오후 0시",
-    venue: "예식장 이름",
+    dateShort: "2026. 08. 15. 토요일 오후 2시",
+    dateLong: "2026년 08월 15일 토요일 오후 2시",
+    venue: "아펠가모 공덕 라로브홀",
     address: "서울특별시 주소를 입력해 주세요",
-    mapUrl: "https://map.kakao.com/"
+    mapUrl: "https://place.map.kakao.com/630786038"
   },
   message:
     "서로의 이름을 부르며 같은 방향을 바라보게 되었습니다. 저희의 시작을 따뜻한 마음으로 축복해 주세요.",
   coverPhoto: "assets/photos/cover.jpg",
   photos: [
     "assets/photos/cover.jpg",
-    "assets/photos/photo-1.jpg",
-    "assets/photos/photo-2.jpg",
-    "assets/photos/photo-3.jpg"
+    "assets/photos/1.jpg",
+    "assets/photos/2.jpg",
+    "assets/photos/3.jpg",
+    "assets/photos/4.jpg",
+    "assets/photos/5.jpg",
+    "assets/photos/6.jpg",
+    "assets/photos/7.jpg",
+    "assets/photos/8.jpg",
+    "assets/photos/9.jpg",
+    "assets/photos/10.jpg",
+    "assets/photos/11.jpg",
+    "assets/photos/12.jpg",
+    "assets/photos/13.jpg",
+    "assets/photos/14.jpg",
+    "assets/photos/15.jpg",
+    "assets/photos/16.jpg",
+    "assets/photos/17.jpg",
+    "assets/photos/18.jpg",
+    "assets/photos/19.jpg",
+    "assets/photos/20.jpg",
+    "assets/photos/21.jpg",
+    "assets/photos/22.jpg",
+    "assets/photos/23.jpg",
+    "assets/photos/24.jpg",
+    "assets/photos/25.jpg"
+
   ]
 };
