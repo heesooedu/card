@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>모바일 청첩장</title>
+    <meta name="description" content="소중한 분들을 결혼식에 초대합니다." />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="모바일 청첩장" />
+    <meta property="og:description" content="소중한 분들을 결혼식에 초대합니다." />
+    <meta property="og:image" content="assets/photos/cover.jpg" />
+    <meta property="og:url" content="https://heesooedu.github.io/card/" />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main class="invite-shell">
+      <section class="hero" aria-label="청첩장 대표 영역">
+        <img id="coverPhoto" class="hero-photo" src="assets/photos/cover.jpg" alt="신랑 신부 대표 사진" />
+        <div class="hero-copy">
+          <p class="eyebrow">Wedding Invitation</p>
+          <h1><span id="groomName">신랑</span> &amp; <span id="brideName">신부</span></h1>
+          <p id="weddingDateText" class="date">2026. 00. 00. 토요일 오후 0시</p>
+        </div>
+      </section>
+
+      <section class="section intro" aria-labelledby="introTitle">
+        <p class="section-kicker">Invite You</p>
+        <h2 id="introTitle">소중한 분들을 초대합니다</h2>
+        <p id="messageText">
+          서로의 이름을 부르며 같은 방향을 바라보게 되었습니다.
+          저희의 시작을 따뜻한 마음으로 축복해 주세요.
+        </p>
+      </section>
+
+      <section class="section couple" aria-label="혼주 및 신랑 신부 정보">
+        <div>
+          <p class="family" id="groomParents">아버지 · 어머니의 아들</p>
+          <strong id="groomNameDetail">신랑</strong>
+        </div>
+        <div>
+          <p class="family" id="brideParents">아버지 · 어머니의 딸</p>
+          <strong id="brideNameDetail">신부</strong>
+        </div>
+      </section>
+
+      <section class="section details" aria-labelledby="detailsTitle">
+        <p class="section-kicker">Wedding Day</p>
+        <h2 id="detailsTitle">예식 안내</h2>
+        <dl>
+          <div>
+            <dt>일시</dt>
+            <dd id="weddingDateDetail">2026년 00월 00일 토요일 오후 0시</dd>
+          </div>
+          <div>
+            <dt>장소</dt>
+            <dd>
+              <span id="venueName">예식장 이름</span>
+              <small id="venueAddress">주소를 입력해 주세요</small>
+            </dd>
+          </div>
+        </dl>
+        <div class="actions">
+          <a id="mapLink" class="button primary" href="#" target="_blank" rel="noreferrer">지도 보기</a>
+          <button id="copyAddress" class="button" type="button">주소 복사</button>
+        </div>
+      </section>
+
+      <section class="section gallery-section" aria-labelledby="galleryTitle">
+        <p class="section-kicker">Gallery</p>
+        <h2 id="galleryTitle">우리의 사진</h2>
+        <div id="gallery" class="gallery" aria-live="polite"></div>
+      </section>
+
+      <section class="section contact" aria-labelledby="contactTitle">
+        <p class="section-kicker">Contact</p>
+        <h2 id="contactTitle">마음 전하실 곳</h2>
+        <div id="accounts" class="account-list"></div>
+      </section>
+    </main>
+  </body>
+</html>
