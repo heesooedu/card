@@ -19,6 +19,26 @@ https://heesooedu.github.io/card/
 
 카카오톡 미리보기 이미지는 `index.html`의 `og:image`와 `assets/photos/cover.jpg`를 사용합니다. 사진을 바꾼 뒤 카카오톡에서 이전 이미지가 보이면 카카오톡 링크 캐시가 남아 있는 상태일 수 있습니다.
 
+## 카카오맵 설정
+
+`config.js`의 `kakaoAppKey`에 Kakao Developers에서 발급받은 JavaScript 키를 입력합니다.
+
+```js
+kakaoAppKey: "발급받은_JavaScript_키"
+```
+
+Kakao Developers의 앱 설정에서 Web 플랫폼 도메인도 등록해야 합니다.
+
+```text
+https://heesooedu.github.io
+```
+
+로컬에서 테스트할 때는 필요에 따라 아래 주소도 추가합니다.
+
+```text
+http://localhost:포트번호
+```
+
 ## GitHub Pages 설정
 
 1. GitHub 저장소 `heesooedu/card`로 파일을 올립니다.

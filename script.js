@@ -28,12 +28,63 @@
   setText("venueName", data.wedding.venue);
   setText("venueAddress", data.wedding.address);
   setText("messageText", data.message);
+  setText("parkingGuide", data.wedding.parkingGuide);
   setImage("coverPhoto", data.coverPhoto, `${data.groom.name} ${data.bride.name} 대표 사진`);
 
-  const venueMap = document.getElementById("venueMap");
-  if (venueMap && data.wedding.mapEmbedUrl) {
-    venueMap.src = data.wedding.mapEmbedUrl;
-  }
+  const renderDirections = () => {
+    const list = document.getElementById("directionsList");
+    if (!list) return;
+
+    const directions = data.wedding.directions || [];
+    list.innerHTML = "";
+    directions.forEach((direction) => {
+      const item = document.createElement("li");
+      item.textContent = direction;
+      list.appendChild(item);
+    });
+  };
+
+  const renderKakaoMap = () => {
+    const mapElement = document.getElementById("kakaoMap");
+    const appKey = data.wedding.kakaoAppKey;
+    if (!mapElement) return;
+
+    if (!appKey || appKey === "YOUR_KAKAO_JAVASCRIPT_KEY") {
+      mapElement.innerHTML = '<p class="map-message">config.js에 카카오 JavaScript 키를 입력해 주세요.</p>';
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`;
+    script.async = true;
+    script.onload = () => {
+      window.kakao.maps.load(() => {
+        const position = new window.kakao.maps.LatLng(data.wedding.latitude, data.wedding.longitude);
+        const map = new window.kakao.maps.Map(mapElement, {
+          center: position,
+          level: 3
+        });
+
+        const marker = new window.kakao.maps.Marker({
+          map,
+          position
+        });
+
+        const infoWindow = new window.kakao.maps.InfoWindow({
+          content: `<div class="map-label">${data.wedding.venue}</div>`
+        });
+        infoWindow.open(map, marker);
+      });
+    };
+    script.onerror = () => {
+      mapElement.innerHTML = '<p class="map-message">카카오맵을 불러오지 못했습니다.</p>';
+    };
+
+    document.head.appendChild(script);
+  };
+
+  renderDirections();
+  renderKakaoMap();
 
   const gallery = document.getElementById("gallery");
   if (gallery) {

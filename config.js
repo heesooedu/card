@@ -15,7 +15,15 @@ window.INVITATION = {
     venue: "아펠가모 공덕 라로브홀",
     address: "서울특별시 주소를 입력해 주세요",
     mapUrl: "https://place.map.kakao.com/630786038",
-    mapEmbedUrl: "https://maps.google.com/maps?q=%EC%95%84%ED%8E%A0%EA%B0%80%EB%AA%A8%20%EA%B3%B5%EB%8D%95%EC%A0%90&output=embed"
+    kakaoAppKey: "133a6b8de148efeded1d8eb04fe727a0",
+    latitude: 37.543090561722,
+    longitude: 126.95071791405,
+    directions: [
+      "공덕역 10번 출구에서 도보 약 1분",
+      "효성해링턴스퀘어 B동 6~7층",
+      "주소: 서울 마포구 마포대로 92"
+    ],
+    parkingGuide: "주차 안내는 추후 업데이트 예정"
   },
   message:
     "서로의 이름을 부르며 같은 방향을 바라보게 되었습니다. 저희의 시작을 따뜻한 마음으로 축복해 주세요.",
