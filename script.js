@@ -49,8 +49,10 @@
     const appKey = data.wedding.kakaoAppKey;
     if (!mapElement) return;
 
+    const fallbackLink = `<a class="map-fallback-link" href="${data.wedding.mapUrl}" target="_blank" rel="noreferrer">카카오맵에서 보기</a>`;
+
     if (!appKey || appKey === "YOUR_KAKAO_JAVASCRIPT_KEY") {
-      mapElement.innerHTML = '<p class="map-message">config.js에 카카오 JavaScript 키를 입력해 주세요.</p>';
+      mapElement.innerHTML = `<div class="map-message"><p>config.js에 카카오 JavaScript 키를 입력해 주세요.</p>${fallbackLink}</div>`;
       return;
     }
 
@@ -77,7 +79,7 @@
       });
     };
     script.onerror = () => {
-      mapElement.innerHTML = '<p class="map-message">카카오맵을 불러오지 못했습니다.</p>';
+      mapElement.innerHTML = `<div class="map-message"><p>카카오맵을 불러오지 못했습니다. Kakao Developers의 JavaScript SDK 도메인 설정을 확인해 주세요.</p>${fallbackLink}</div>`;
     };
 
     document.head.appendChild(script);
