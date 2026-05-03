@@ -30,37 +30,70 @@
   setText("messageText", data.message);
   setImage("coverPhoto", data.coverPhoto, `${data.groom.name} ${data.bride.name} 대표 사진`);
 
-  const mapLink = document.getElementById("mapLink");
-  if (mapLink) mapLink.href = data.wedding.mapUrl;
-
-  const copyAddress = document.getElementById("copyAddress");
-  if (copyAddress) {
-    copyAddress.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(data.wedding.address);
-        copyAddress.textContent = "복사 완료";
-        window.setTimeout(() => {
-          copyAddress.textContent = "주소 복사";
-        }, 1600);
-      } catch {
-        copyAddress.textContent = "복사 실패";
-      }
-    });
+  const venueMap = document.getElementById("venueMap");
+  if (venueMap && data.wedding.mapEmbedUrl) {
+    venueMap.src = data.wedding.mapEmbedUrl;
   }
 
   const gallery = document.getElementById("gallery");
   if (gallery) {
-    gallery.innerHTML = "";
-    data.photos.forEach((photo, index) => {
-      const figure = document.createElement("figure");
-      const image = document.createElement("img");
-      image.src = photo;
-      image.alt = `${data.groom.name} ${data.bride.name} 사진 ${index + 1}`;
-      image.loading = "lazy";
-      image.onerror = () => figure.remove();
-      figure.appendChild(image);
-      gallery.appendChild(figure);
+    let currentPhoto = 0;
+    const photos = data.photos.filter(Boolean);
+
+    gallery.innerHTML = `
+      <figure class="gallery-view">
+        <img id="galleryPhoto" alt="" draggable="false" />
+      </figure>
+      <div class="gallery-controls" aria-label="사진 넘기기">
+        <button id="prevPhoto" class="gallery-button" type="button" aria-label="이전 사진">‹</button>
+        <span id="galleryCount" class="gallery-count"></span>
+        <button id="nextPhoto" class="gallery-button" type="button" aria-label="다음 사진">›</button>
+      </div>
+    `;
+
+    const galleryPhoto = document.getElementById("galleryPhoto");
+    const galleryCount = document.getElementById("galleryCount");
+    const prevPhoto = document.getElementById("prevPhoto");
+    const nextPhoto = document.getElementById("nextPhoto");
+
+    const renderPhoto = () => {
+      if (!galleryPhoto || !galleryCount || photos.length === 0) return;
+      galleryPhoto.src = photos[currentPhoto];
+      galleryPhoto.alt = `${data.groom.name} ${data.bride.name} 사진 ${currentPhoto + 1}`;
+      galleryCount.textContent = `${currentPhoto + 1} / ${photos.length}`;
+    };
+
+    const movePhoto = (direction) => {
+      currentPhoto = (currentPhoto + direction + photos.length) % photos.length;
+      renderPhoto();
+    };
+
+    if (photos.length <= 1) {
+      prevPhoto.disabled = true;
+      nextPhoto.disabled = true;
+    }
+
+    prevPhoto.addEventListener("click", () => {
+      movePhoto(-1);
     });
+
+    nextPhoto.addEventListener("click", () => {
+      movePhoto(1);
+    });
+
+    let touchStartX = 0;
+    gallery.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+    });
+
+    gallery.addEventListener("touchend", (event) => {
+      const touchEndX = event.changedTouches[0].clientX;
+      const distance = touchEndX - touchStartX;
+      if (Math.abs(distance) < 45 || photos.length <= 1) return;
+      movePhoto(distance > 0 ? -1 : 1);
+    });
+
+    renderPhoto();
   }
 
   const accounts = document.getElementById("accounts");

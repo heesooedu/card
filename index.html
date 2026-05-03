@@ -63,9 +63,14 @@
             </dd>
           </div>
         </dl>
-        <div class="actions">
-          <a id="mapLink" class="button primary" href="#" target="_blank" rel="noreferrer">지도 보기</a>
-          <button id="copyAddress" class="button" type="button">주소 복사</button>
+        <div class="map-frame">
+          <iframe
+            id="venueMap"
+            title="아펠가모 공덕점 위치"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://maps.google.com/maps?q=%EC%95%84%ED%8E%A0%EA%B0%80%EB%AA%A8%20%EA%B3%B5%EB%8D%95%EC%A0%90&output=embed"
+          ></iframe>
         </div>
       </section>
 

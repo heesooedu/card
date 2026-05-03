@@ -14,7 +14,8 @@ window.INVITATION = {
     dateLong: "2026년 08월 15일 토요일 오후 2시",
     venue: "아펠가모 공덕 라로브홀",
     address: "서울특별시 주소를 입력해 주세요",
-    mapUrl: "https://place.map.kakao.com/630786038"
+    mapUrl: "https://place.map.kakao.com/630786038",
+    mapEmbedUrl: "https://maps.google.com/maps?q=%EC%95%84%ED%8E%A0%EA%B0%80%EB%AA%A8%20%EA%B3%B5%EB%8D%95%EC%A0%90&output=embed"
   },
   message:
     "서로의 이름을 부르며 같은 방향을 바라보게 되었습니다. 저희의 시작을 따뜻한 마음으로 축복해 주세요.",
