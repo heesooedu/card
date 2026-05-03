@@ -15,7 +15,7 @@ window.INVITATION = {
     venue: "아펠가모 공덕 라로브홀",
     address: "서울특별시 주소를 입력해 주세요",
     mapUrl: "https://place.map.kakao.com/630786038",
-    kakaoAppKey: "133a6b8de148efeded1d8eb04fe727a0",
+    kakaoAppKey: "f5f8007773609417710fdccb588dc87f",
     latitude: 37.543090561722,
     longitude: 126.95071791405,
     directions: [
