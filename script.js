@@ -231,15 +231,60 @@
   const gallery = document.getElementById("gallery");
   if (gallery) {
     let renderedCount = 0;
+    let activePhotoIndex = 0;
     const photos = data.photos.filter(Boolean);
 
     gallery.innerHTML = `
       <div id="galleryGrid" class="gallery-grid"></div>
       <button id="loadMorePhotos" class="gallery-more" type="button"></button>
+      <div id="galleryViewer" class="gallery-viewer" aria-hidden="true">
+        <div class="gallery-viewer-backdrop"></div>
+        <div class="gallery-viewer-panel" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
+          <button id="closeGalleryViewer" class="gallery-viewer-close" type="button" aria-label="닫기">×</button>
+          <button id="viewerPrevPhoto" class="gallery-viewer-nav prev" type="button" aria-label="이전 사진">‹</button>
+          <img id="viewerPhoto" alt="" draggable="false" />
+          <button id="viewerNextPhoto" class="gallery-viewer-nav next" type="button" aria-label="다음 사진">›</button>
+          <span id="viewerCount" class="gallery-viewer-count"></span>
+        </div>
+      </div>
     `;
 
     const galleryGrid = document.getElementById("galleryGrid");
     const loadMorePhotos = document.getElementById("loadMorePhotos");
+    const galleryViewer = document.getElementById("galleryViewer");
+    const viewerPhoto = document.getElementById("viewerPhoto");
+    const viewerCount = document.getElementById("viewerCount");
+    const closeGalleryViewer = document.getElementById("closeGalleryViewer");
+    const viewerPrevPhoto = document.getElementById("viewerPrevPhoto");
+    const viewerNextPhoto = document.getElementById("viewerNextPhoto");
+
+    const showViewerPhoto = () => {
+      if (!viewerPhoto || !viewerCount) return;
+      viewerPhoto.src = photos[activePhotoIndex];
+      viewerPhoto.alt = `${data.groom.name} ${data.bride.name} 사진 ${activePhotoIndex + 1}`;
+      viewerCount.textContent = `${activePhotoIndex + 1} / ${photos.length}`;
+    };
+
+    const openViewer = (index) => {
+      if (!galleryViewer || photos.length === 0) return;
+      activePhotoIndex = index;
+      showViewerPhoto();
+      galleryViewer.classList.add("is-open");
+      galleryViewer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("viewer-open");
+    };
+
+    const closeViewer = () => {
+      if (!galleryViewer) return;
+      galleryViewer.classList.remove("is-open");
+      galleryViewer.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("viewer-open");
+    };
+
+    const moveViewer = (direction) => {
+      activePhotoIndex = (activePhotoIndex + direction + photos.length) % photos.length;
+      showViewerPhoto();
+    };
 
     const appendPhotos = (nextCount = 9) => {
       if (!galleryGrid || !loadMorePhotos) return;
@@ -265,6 +310,7 @@
             thumb.classList.remove("is-selected");
           });
           button.classList.add("is-selected");
+          openViewer(index);
         });
 
         galleryGrid.appendChild(button);
@@ -278,6 +324,34 @@
 
     loadMorePhotos.addEventListener("click", () => {
       appendPhotos(9);
+    });
+
+    closeGalleryViewer.addEventListener("click", closeViewer);
+    viewerPrevPhoto.addEventListener("click", () => moveViewer(-1));
+    viewerNextPhoto.addEventListener("click", () => moveViewer(1));
+    galleryViewer.addEventListener("click", (event) => {
+      if (event.target === galleryViewer || event.target.classList.contains("gallery-viewer-backdrop")) {
+        closeViewer();
+      }
+    });
+
+    let viewerTouchStartX = 0;
+    galleryViewer.addEventListener("touchstart", (event) => {
+      viewerTouchStartX = event.changedTouches[0].clientX;
+    });
+
+    galleryViewer.addEventListener("touchend", (event) => {
+      const touchEndX = event.changedTouches[0].clientX;
+      const distance = touchEndX - viewerTouchStartX;
+      if (Math.abs(distance) < 45) return;
+      moveViewer(distance > 0 ? -1 : 1);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (!galleryViewer.classList.contains("is-open")) return;
+      if (event.key === "Escape") closeViewer();
+      if (event.key === "ArrowLeft") moveViewer(-1);
+      if (event.key === "ArrowRight") moveViewer(1);
     });
 
     appendPhotos(9);
