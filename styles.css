@@ -152,7 +152,7 @@ h2 {
   text-align: left;
 }
 
-.details div {
+.details dl > div {
   display: grid;
   grid-template-columns: 42px 1fr;
   gap: 12px;
@@ -160,7 +160,7 @@ h2 {
   border-top: 1px solid var(--line);
 }
 
-.details div:last-child {
+.details dl > div:last-child {
   border-bottom: 1px solid var(--line);
 }
 
@@ -234,9 +234,11 @@ dd small {
 }
 
 .calendar-grid span {
-  min-height: 34px;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
+  justify-self: center;
   border-radius: 50%;
   color: var(--muted);
   font-size: 0.84rem;
