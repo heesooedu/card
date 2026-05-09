@@ -129,10 +129,33 @@
     const kakaoMapLink = document.getElementById("kakaoMapLink");
     const naverMapLink = document.getElementById("naverMapLink");
     const tmapLink = document.getElementById("tmapLink");
+    const mapOpenOverlay = document.getElementById("mapOpenOverlay");
 
     if (kakaoMapLink) kakaoMapLink.href = links.kakao;
     if (naverMapLink) naverMapLink.href = links.naver;
     if (tmapLink) tmapLink.href = links.tmap;
+    if (mapOpenOverlay) mapOpenOverlay.href = links.kakao;
+
+    if (mapOpenOverlay) {
+      let touchStartY = 0;
+      let isMapTouchScroll = false;
+      mapOpenOverlay.addEventListener("touchstart", (event) => {
+        touchStartY = event.changedTouches[0].clientY;
+        isMapTouchScroll = false;
+      });
+
+      mapOpenOverlay.addEventListener("touchmove", (event) => {
+        if (Math.abs(event.changedTouches[0].clientY - touchStartY) > 12) {
+          isMapTouchScroll = true;
+        }
+      });
+
+      mapOpenOverlay.addEventListener("click", (event) => {
+        if (isMapTouchScroll) {
+          event.preventDefault();
+        }
+      });
+    }
   };
 
   const renderCalendar = () => {
@@ -185,8 +208,13 @@
         const fallbackPosition = new window.kakao.maps.LatLng(data.wedding.latitude, data.wedding.longitude);
         const map = new window.kakao.maps.Map(mapElement, {
           center: fallbackPosition,
-          level: 3
+          level: 2,
+          draggable: false,
+          scrollwheel: false,
+          disableDoubleClick: true,
+          disableDoubleClickZoom: true
         });
+        map.setZoomable(false);
 
         const marker = new window.kakao.maps.Marker({
           map,
@@ -204,14 +232,6 @@
           const position = new window.kakao.maps.LatLng(Number(place.y), Number(place.x));
           marker.setPosition(position);
           map.setCenter(position);
-        });
-
-        window.kakao.maps.event.addListener(map, "click", () => {
-          window.open(links.kakao, "_blank", "noreferrer");
-        });
-
-        window.kakao.maps.event.addListener(marker, "click", () => {
-          window.open(links.kakao, "_blank", "noreferrer");
         });
       });
     };
@@ -242,7 +262,9 @@
         <div class="gallery-viewer-panel" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
           <button id="closeGalleryViewer" class="gallery-viewer-close" type="button" aria-label="닫기">×</button>
           <button id="viewerPrevPhoto" class="gallery-viewer-nav prev" type="button" aria-label="이전 사진">‹</button>
-          <img id="viewerPhoto" alt="" draggable="false" />
+          <figure class="gallery-viewer-frame">
+            <img id="viewerPhoto" alt="" draggable="false" />
+          </figure>
           <button id="viewerNextPhoto" class="gallery-viewer-nav next" type="button" aria-label="다음 사진">›</button>
           <span id="viewerCount" class="gallery-viewer-count"></span>
         </div>
@@ -317,12 +339,30 @@
       });
 
       renderedCount = nextVisibleCount;
+      updateGalleryButton();
+    };
+
+    const collapseGallery = () => {
+      if (!galleryGrid || !loadMorePhotos) return;
+      renderedCount = 0;
+      galleryGrid.innerHTML = "";
+      appendPhotos(9);
+      gallery.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const updateGalleryButton = () => {
       const remainingCount = Math.max(photos.length - renderedCount, 0);
-      loadMorePhotos.hidden = remainingCount === 0;
-      loadMorePhotos.textContent = `더보기 ${remainingCount > 0 ? `(${remainingCount})` : ""}`;
+      loadMorePhotos.hidden = photos.length <= 9;
+      loadMorePhotos.dataset.mode = remainingCount === 0 ? "collapse" : "more";
+      loadMorePhotos.textContent =
+        remainingCount === 0 ? "접기" : `더보기 ${remainingCount > 0 ? `(${remainingCount})` : ""}`;
     };
 
     loadMorePhotos.addEventListener("click", () => {
+      if (loadMorePhotos.dataset.mode === "collapse") {
+        collapseGallery();
+        return;
+      }
       appendPhotos(9);
     });
 
