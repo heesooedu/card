@@ -28,6 +28,63 @@
     );
   };
 
+  const initScrollEffects = () => {
+    const animatedItems = document.querySelectorAll(
+      ".section, .calendar-card, .kakao-map, .way-info, .gallery, .account-item"
+    );
+
+    animatedItems.forEach((item, index) => {
+      item.classList.add("reveal-item");
+      item.style.setProperty("--reveal-delay", `${Math.min(index * 45, 220)}ms`);
+    });
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          rootMargin: "0px 0px -12% 0px",
+          threshold: 0.16
+        }
+      );
+
+      animatedItems.forEach((item) => observer.observe(item));
+    } else {
+      animatedItems.forEach((item) => item.classList.add("is-visible"));
+    }
+
+    const hero = document.querySelector(".hero");
+    const heroPhoto = document.querySelector(".hero-photo");
+    if (!hero || !heroPhoto) return;
+
+    const updateHero = () => {
+      const progress = Math.min(window.scrollY / Math.max(hero.offsetHeight, 1), 1);
+      hero.style.setProperty("--hero-fade", progress.toFixed(3));
+      heroPhoto.style.setProperty("--hero-shift", `${progress * 34}px`);
+    };
+
+    let ticking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          updateHero();
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+
+    updateHero();
+  };
+
   setText("groomName", data.groom.name);
   setText("brideName", data.bride.name);
   setText("groomNameDetail", data.groom.name);
@@ -219,4 +276,6 @@
       accounts.appendChild(item);
     });
   }
+
+  initScrollEffects();
 })();
