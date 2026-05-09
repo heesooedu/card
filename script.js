@@ -112,6 +112,29 @@
     });
   };
 
+  const getMapLinks = () => {
+    const name = encodeURIComponent(data.wedding.venue);
+    const lat = data.wedding.latitude;
+    const lng = data.wedding.longitude;
+
+    return {
+      kakao: data.wedding.mapUrl,
+      naver: `nmap://route/car?dlat=${lat}&dlng=${lng}&dname=${name}&appname=heesooedu.github.io.card`,
+      tmap: `tmap://route?goalname=${name}&goalx=${lng}&goaly=${lat}`
+    };
+  };
+
+  const renderMapActions = () => {
+    const links = getMapLinks();
+    const kakaoMapLink = document.getElementById("kakaoMapLink");
+    const naverMapLink = document.getElementById("naverMapLink");
+    const tmapLink = document.getElementById("tmapLink");
+
+    if (kakaoMapLink) kakaoMapLink.href = links.kakao;
+    if (naverMapLink) naverMapLink.href = links.naver;
+    if (tmapLink) tmapLink.href = links.tmap;
+  };
+
   const renderCalendar = () => {
     const monthElement = document.getElementById("calendarMonth");
     const dayElement = document.getElementById("calendarDay");
@@ -146,7 +169,8 @@
     const appKey = data.wedding.kakaoAppKey;
     if (!mapElement) return;
 
-    const fallbackLink = `<a class="map-fallback-link" href="${data.wedding.mapUrl}" target="_blank" rel="noreferrer">카카오맵에서 보기</a>`;
+    const links = getMapLinks();
+    const fallbackLink = `<a class="map-fallback-link" href="${links.kakao}" target="_blank" rel="noreferrer">카카오맵에서 보기</a>`;
 
     if (!appKey || appKey === "YOUR_KAKAO_JAVASCRIPT_KEY") {
       mapElement.innerHTML = `<div class="map-message"><p>config.js에 카카오 JavaScript 키를 입력해 주세요.</p>${fallbackLink}</div>`;
@@ -183,11 +207,11 @@
         });
 
         window.kakao.maps.event.addListener(map, "click", () => {
-          window.open(data.wedding.mapUrl, "_blank", "noreferrer");
+          window.open(links.kakao, "_blank", "noreferrer");
         });
 
         window.kakao.maps.event.addListener(marker, "click", () => {
-          window.open(data.wedding.mapUrl, "_blank", "noreferrer");
+          window.open(links.kakao, "_blank", "noreferrer");
         });
       });
     };
@@ -200,68 +224,63 @@
 
   blockZoomGestures();
   renderDirections();
+  renderMapActions();
   renderCalendar();
   renderKakaoMap();
 
   const gallery = document.getElementById("gallery");
   if (gallery) {
-    let currentPhoto = 0;
+    let renderedCount = 0;
     const photos = data.photos.filter(Boolean);
 
     gallery.innerHTML = `
-      <figure class="gallery-view">
-        <img id="galleryPhoto" alt="" draggable="false" />
-      </figure>
-      <div class="gallery-controls" aria-label="사진 넘기기">
-        <button id="prevPhoto" class="gallery-button" type="button" aria-label="이전 사진">‹</button>
-        <span id="galleryCount" class="gallery-count"></span>
-        <button id="nextPhoto" class="gallery-button" type="button" aria-label="다음 사진">›</button>
-      </div>
+      <div id="galleryGrid" class="gallery-grid"></div>
+      <button id="loadMorePhotos" class="gallery-more" type="button"></button>
     `;
 
-    const galleryPhoto = document.getElementById("galleryPhoto");
-    const galleryCount = document.getElementById("galleryCount");
-    const prevPhoto = document.getElementById("prevPhoto");
-    const nextPhoto = document.getElementById("nextPhoto");
+    const galleryGrid = document.getElementById("galleryGrid");
+    const loadMorePhotos = document.getElementById("loadMorePhotos");
 
-    const renderPhoto = () => {
-      if (!galleryPhoto || !galleryCount || photos.length === 0) return;
-      galleryPhoto.src = photos[currentPhoto];
-      galleryPhoto.alt = `${data.groom.name} ${data.bride.name} 사진 ${currentPhoto + 1}`;
-      galleryCount.textContent = `${currentPhoto + 1} / ${photos.length}`;
+    const appendPhotos = (nextCount = 9) => {
+      if (!galleryGrid || !loadMorePhotos) return;
+
+      const nextVisibleCount = Math.min(renderedCount + nextCount, photos.length);
+      photos.slice(renderedCount, nextVisibleCount).forEach((photo, offset) => {
+        const index = renderedCount + offset;
+        const button = document.createElement("button");
+        button.className = "gallery-thumb";
+        button.type = "button";
+        button.setAttribute("aria-label", `${index + 1}번째 사진`);
+
+        const image = document.createElement("img");
+        image.src = photo;
+        image.alt = `${data.groom.name} ${data.bride.name} 사진 ${index + 1}`;
+        image.loading = index < 9 ? "eager" : "lazy";
+        image.decoding = "async";
+        image.draggable = false;
+
+        button.appendChild(image);
+        button.addEventListener("click", () => {
+          galleryGrid.querySelectorAll(".gallery-thumb").forEach((thumb) => {
+            thumb.classList.remove("is-selected");
+          });
+          button.classList.add("is-selected");
+        });
+
+        galleryGrid.appendChild(button);
+      });
+
+      renderedCount = nextVisibleCount;
+      const remainingCount = Math.max(photos.length - renderedCount, 0);
+      loadMorePhotos.hidden = remainingCount === 0;
+      loadMorePhotos.textContent = `더보기 ${remainingCount > 0 ? `(${remainingCount})` : ""}`;
     };
 
-    const movePhoto = (direction) => {
-      currentPhoto = (currentPhoto + direction + photos.length) % photos.length;
-      renderPhoto();
-    };
-
-    if (photos.length <= 1) {
-      prevPhoto.disabled = true;
-      nextPhoto.disabled = true;
-    }
-
-    prevPhoto.addEventListener("click", () => {
-      movePhoto(-1);
+    loadMorePhotos.addEventListener("click", () => {
+      appendPhotos(9);
     });
 
-    nextPhoto.addEventListener("click", () => {
-      movePhoto(1);
-    });
-
-    let touchStartX = 0;
-    gallery.addEventListener("touchstart", (event) => {
-      touchStartX = event.changedTouches[0].clientX;
-    });
-
-    gallery.addEventListener("touchend", (event) => {
-      const touchEndX = event.changedTouches[0].clientX;
-      const distance = touchEndX - touchStartX;
-      if (Math.abs(distance) < 45 || photos.length <= 1) return;
-      movePhoto(distance > 0 ? -1 : 1);
-    });
-
-    renderPhoto();
+    appendPhotos(9);
   }
 
   const accounts = document.getElementById("accounts");
