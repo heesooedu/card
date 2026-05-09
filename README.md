@@ -5,9 +5,10 @@ GitHub Pages에 올려 카카오톡으로 공유할 수 있는 정적 모바일 
 ## 수정 방법
 
 1. `config.js`에서 신랑, 신부, 예식일, 장소, 계좌, 문구를 수정합니다.
-2. 사진은 `assets/photos` 폴더에 넣습니다.
-3. 대표 사진은 `assets/photos/cover.jpg` 이름으로 저장합니다.
-4. 갤러리 사진은 `config.js`의 `photos` 목록에 파일 경로를 추가합니다.
+2. 원본 사진은 `assets/photos` 폴더에 넣습니다.
+3. 청첩장에서 실제로 불러올 웹용 사진은 `assets/photos/web` 폴더에 넣습니다.
+4. 대표 사진은 `assets/photos/web/cover.jpg` 이름으로 저장합니다.
+5. 갤러리 사진은 `config.js`의 `photos` 목록에 파일 경로를 추가합니다.
 
 ## 카카오톡 공유
 

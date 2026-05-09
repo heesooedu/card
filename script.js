@@ -55,6 +55,35 @@
     });
   };
 
+  const renderCalendar = () => {
+    const monthElement = document.getElementById("calendarMonth");
+    const dayElement = document.getElementById("calendarDay");
+    const gridElement = document.getElementById("calendarGrid");
+    if (!monthElement || !dayElement || !gridElement || !data.wedding.dateISO) return;
+
+    const weddingDate = new Date(`${data.wedding.dateISO}T00:00:00`);
+    const year = weddingDate.getFullYear();
+    const month = weddingDate.getMonth();
+    const day = weddingDate.getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    monthElement.textContent = `${year}. ${String(month + 1).padStart(2, "0")}`;
+    dayElement.textContent = String(day);
+    gridElement.innerHTML = "";
+
+    for (let index = 0; index < firstDay; index += 1) {
+      gridElement.appendChild(document.createElement("span"));
+    }
+
+    for (let date = 1; date <= lastDate; date += 1) {
+      const cell = document.createElement("span");
+      cell.textContent = String(date);
+      if (date === day) cell.className = "is-wedding-day";
+      gridElement.appendChild(cell);
+    }
+  };
+
   const renderKakaoMap = () => {
     const mapElement = document.getElementById("kakaoMap");
     const appKey = data.wedding.kakaoAppKey;
@@ -68,19 +97,32 @@
     }
 
     const script = document.createElement("script");
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&libraries=services&autoload=false`;
     script.async = true;
     script.onload = () => {
       window.kakao.maps.load(() => {
-        const position = new window.kakao.maps.LatLng(data.wedding.latitude, data.wedding.longitude);
+        const fallbackPosition = new window.kakao.maps.LatLng(data.wedding.latitude, data.wedding.longitude);
         const map = new window.kakao.maps.Map(mapElement, {
-          center: position,
+          center: fallbackPosition,
           level: 3
         });
 
         const marker = new window.kakao.maps.Marker({
           map,
-          position
+          position: fallbackPosition
+        });
+
+        const placeId = data.wedding.mapUrl.split("/").pop();
+        const places = new window.kakao.maps.services.Places();
+        places.keywordSearch(data.wedding.venue, (results, status) => {
+          if (status !== window.kakao.maps.services.Status.OK) return;
+
+          const place = results.find((result) => result.id === placeId) || results[0];
+          if (!place) return;
+
+          const position = new window.kakao.maps.LatLng(Number(place.y), Number(place.x));
+          marker.setPosition(position);
+          map.setCenter(position);
         });
 
         window.kakao.maps.event.addListener(map, "click", () => {
@@ -101,6 +143,7 @@
 
   blockZoomGestures();
   renderDirections();
+  renderCalendar();
   renderKakaoMap();
 
   const gallery = document.getElementById("gallery");
