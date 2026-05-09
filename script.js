@@ -208,7 +208,7 @@
         const fallbackPosition = new window.kakao.maps.LatLng(data.wedding.latitude, data.wedding.longitude);
         const map = new window.kakao.maps.Map(mapElement, {
           center: fallbackPosition,
-          level: 2,
+          level: 3,
           draggable: false,
           scrollwheel: false,
           disableDoubleClick: true,
