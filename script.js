@@ -129,33 +129,10 @@
     const kakaoMapLink = document.getElementById("kakaoMapLink");
     const naverMapLink = document.getElementById("naverMapLink");
     const tmapLink = document.getElementById("tmapLink");
-    const mapOpenOverlay = document.getElementById("mapOpenOverlay");
 
     if (kakaoMapLink) kakaoMapLink.href = links.kakao;
     if (naverMapLink) naverMapLink.href = links.naver;
     if (tmapLink) tmapLink.href = links.tmap;
-    if (mapOpenOverlay) mapOpenOverlay.href = links.kakao;
-
-    if (mapOpenOverlay) {
-      let touchStartY = 0;
-      let isMapTouchScroll = false;
-      mapOpenOverlay.addEventListener("touchstart", (event) => {
-        touchStartY = event.changedTouches[0].clientY;
-        isMapTouchScroll = false;
-      });
-
-      mapOpenOverlay.addEventListener("touchmove", (event) => {
-        if (Math.abs(event.changedTouches[0].clientY - touchStartY) > 12) {
-          isMapTouchScroll = true;
-        }
-      });
-
-      mapOpenOverlay.addEventListener("click", (event) => {
-        if (isMapTouchScroll) {
-          event.preventDefault();
-        }
-      });
-    }
   };
 
   const renderCalendar = () => {
@@ -208,13 +185,8 @@
         const fallbackPosition = new window.kakao.maps.LatLng(data.wedding.latitude, data.wedding.longitude);
         const map = new window.kakao.maps.Map(mapElement, {
           center: fallbackPosition,
-          level: 3,
-          draggable: false,
-          scrollwheel: false,
-          disableDoubleClick: true,
-          disableDoubleClickZoom: true
+          level: 3
         });
-        map.setZoomable(false);
 
         const marker = new window.kakao.maps.Marker({
           map,
@@ -232,6 +204,10 @@
           const position = new window.kakao.maps.LatLng(Number(place.y), Number(place.x));
           marker.setPosition(position);
           map.setCenter(position);
+        });
+
+        window.kakao.maps.event.addListener(marker, "click", () => {
+          window.open(links.kakao, "_blank", "noreferrer");
         });
       });
     };

@@ -283,26 +283,13 @@ dd small {
   animation: dayPulse 2200ms ease-in-out infinite;
 }
 
-.kakao-map-wrap {
-  position: relative;
-  margin-top: 24px;
-}
-
 .kakao-map {
   height: 320px;
+  margin-top: 24px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--cream);
-  pointer-events: none;
-}
-
-.map-open-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  border-radius: 8px;
-  touch-action: pan-y;
 }
 
 .map-message {
