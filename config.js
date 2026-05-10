@@ -52,10 +52,7 @@ window.INVITATION = {
     "assets/photos/web/19.jpg",
     "assets/photos/web/20.jpg",
     "assets/photos/web/21.jpg",
-    "assets/photos/web/22.jpg",
-    "assets/photos/web/23.jpg",
-    "assets/photos/web/24.jpg",
-    "assets/photos/web/25.jpg"
+    "assets/photos/web/22.jpg"
 
   ]
 };
