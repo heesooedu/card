@@ -233,19 +233,26 @@
     gallery.innerHTML = `
       <div id="galleryGrid" class="gallery-grid"></div>
       <button id="loadMorePhotos" class="gallery-more" type="button"></button>
-      <div id="galleryViewer" class="gallery-viewer" aria-hidden="true">
-        <div class="gallery-viewer-backdrop"></div>
-        <div class="gallery-viewer-panel" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
-          <button id="closeGalleryViewer" class="gallery-viewer-close" type="button" aria-label="닫기">×</button>
-          <button id="viewerPrevPhoto" class="gallery-viewer-nav prev" type="button" aria-label="이전 사진">‹</button>
-          <figure class="gallery-viewer-frame">
-            <img id="viewerPhoto" alt="" draggable="false" />
-          </figure>
-          <button id="viewerNextPhoto" class="gallery-viewer-nav next" type="button" aria-label="다음 사진">›</button>
-          <span id="viewerCount" class="gallery-viewer-count"></span>
-        </div>
-      </div>
     `;
+
+    document.getElementById("galleryViewer")?.remove();
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `
+        <div id="galleryViewer" class="gallery-viewer" aria-hidden="true">
+          <div class="gallery-viewer-backdrop"></div>
+          <div class="gallery-viewer-panel" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
+            <button id="closeGalleryViewer" class="gallery-viewer-close" type="button" aria-label="닫기">×</button>
+            <button id="viewerPrevPhoto" class="gallery-viewer-nav prev" type="button" aria-label="이전 사진">‹</button>
+            <figure class="gallery-viewer-frame">
+              <img id="viewerPhoto" alt="" draggable="false" />
+            </figure>
+            <button id="viewerNextPhoto" class="gallery-viewer-nav next" type="button" aria-label="다음 사진">›</button>
+            <span id="viewerCount" class="gallery-viewer-count"></span>
+          </div>
+        </div>
+      `
+    );
 
     const galleryGrid = document.getElementById("galleryGrid");
     const loadMorePhotos = document.getElementById("loadMorePhotos");

@@ -470,8 +470,9 @@ dd small {
   position: fixed;
   inset: 0;
   z-index: 20;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 22px;
   opacity: 0;
   pointer-events: none;
