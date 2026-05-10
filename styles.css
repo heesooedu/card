@@ -477,6 +477,7 @@ dd small {
   opacity: 0;
   pointer-events: none;
   transition: opacity 220ms ease;
+  box-sizing: border-box;
 }
 
 .gallery-viewer.is-open {
@@ -493,9 +494,9 @@ dd small {
 
 .gallery-viewer-panel {
   position: relative;
-  width: min(100%, 430px);
-  height: min(82vh, 620px);
-  height: min(82dvh, 620px);
+  width: min(calc(100vw - 44px), 430px);
+  height: min(calc(100vh - 72px), 620px);
+  height: min(calc(100dvh - 72px), 620px);
   display: grid;
   place-items: center;
   transform: translateY(16px) scale(0.97);
@@ -640,6 +641,18 @@ dd small {
   .gallery-viewer-panel {
     height: 76vh;
     height: 76dvh;
+  }
+}
+
+@media (min-width: 720px) {
+  .gallery-viewer {
+    padding: 40px;
+  }
+
+  .gallery-viewer-panel {
+    width: min(calc(100vw - 140px), 560px);
+    height: min(calc(100vh - 120px), 760px);
+    height: min(calc(100dvh - 120px), 760px);
   }
 }
 
