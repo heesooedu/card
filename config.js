@@ -29,9 +29,8 @@ window.INVITATION = {
   message:
     "서로의 이름을 부르며 같은 방향을 바라보게 되었습니다. 저희의 시작을 따뜻한 마음으로 축복해 주세요.",
   coverPhoto: "assets/photos/web/cover.jpg",
-  shareImage: "assets/photos/web/share.jpg",
+  shareImage: "assets/photos/web/share-og-1200x630.jpg",
   photos: [
-    "assets/photos/web/cover.jpg",
     "assets/photos/web/1.jpg",
     "assets/photos/web/2.jpg",
     "assets/photos/web/3.jpg",
