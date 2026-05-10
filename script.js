@@ -9,12 +9,18 @@
   const setImage = (id, src, alt) => {
     const image = document.getElementById(id);
     if (!image) return;
-    image.src = src;
+    image.src = versionAsset(src);
     image.alt = alt;
     image.onerror = () => {
       image.classList.add("is-missing");
       image.removeAttribute("src");
     };
+  };
+
+  const versionAsset = (src) => {
+    if (!src || /^(https?:|data:|blob:)/.test(src)) return src;
+    const separator = src.includes("?") ? "&" : "?";
+    return `${src}${separator}v=${encodeURIComponent(data.assetVersion || "1")}`;
   };
 
   const blockZoomGestures = () => {
@@ -228,7 +234,7 @@
   if (gallery) {
     let renderedCount = 0;
     let activePhotoIndex = 0;
-    const photos = data.photos.filter(Boolean);
+    const photos = data.photos.filter(Boolean).map(versionAsset);
 
     gallery.innerHTML = `
       <div id="galleryGrid" class="gallery-grid"></div>

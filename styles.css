@@ -590,6 +590,7 @@ dd small {
   display: grid;
   gap: 10px;
   text-align: left;
+  overflow: visible;
 }
 
 .account-item {
@@ -597,6 +598,7 @@ dd small {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--white);
+  min-width: 0;
 }
 
 .account-item span {
@@ -612,6 +614,12 @@ dd small {
   color: var(--ink);
   font-size: 0.95rem;
   line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.contact {
+  padding-bottom: 96px;
+  overflow: visible;
 }
 
 @media (max-width: 360px) {

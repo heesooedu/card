@@ -1,4 +1,5 @@
 window.INVITATION = {
+  assetVersion: "20260510-photos-2",
   groom: {
     name: "서희수",
     parents: "서준 · 박인덕의 아들",
