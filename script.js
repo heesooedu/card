@@ -119,7 +119,7 @@
   };
 
   const getMapLinks = () => {
-    const name = encodeURIComponent(data.wedding.venue);
+    const name = encodeURIComponent(data.wedding.mapSearchKeyword || data.wedding.venue);
     const lat = data.wedding.latitude;
     const lng = data.wedding.longitude;
 
@@ -201,10 +201,15 @@
 
         const placeId = data.wedding.mapUrl.split("/").pop();
         const places = new window.kakao.maps.services.Places();
-        places.keywordSearch(data.wedding.venue, (results, status) => {
+        const keyword = data.wedding.mapSearchKeyword || data.wedding.venue;
+        places.keywordSearch(keyword, (results, status) => {
           if (status !== window.kakao.maps.services.Status.OK) return;
 
-          const place = results.find((result) => result.id === placeId) || results[0];
+          const place =
+            results.find((result) => result.id === placeId) ||
+            results.find((result) => result.place_name === keyword) ||
+            results.find((result) => result.place_name.includes(keyword)) ||
+            results[0];
           if (!place) return;
 
           const position = new window.kakao.maps.LatLng(Number(place.y), Number(place.x));

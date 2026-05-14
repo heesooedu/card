@@ -15,6 +15,7 @@ window.INVITATION = {
     dateLong: "2026년 08월 15일 토요일 오후 2시",
     dateISO: "2026-08-15",
     venue: "아펠가모 공덕 라로브홀(7F)",
+    mapSearchKeyword: "아펠가모 공덕점",
     mapUrl: "https://place.map.kakao.com/630786038",
     kakaoAppKey: "f5f8007773609417710fdccb588dc87f",
     latitude: 37.543090561722,
